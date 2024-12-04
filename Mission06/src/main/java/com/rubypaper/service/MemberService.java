@@ -59,7 +59,11 @@ public class MemberService {
 			logRepo.save(Log.builder()
 				     .method("put")
 				     .regidate(new Date())
+<<<<<<< HEAD
 				     .success(1)
+=======
+				     .success((m == null) ? 0 : 1)
+>>>>>>> d216e513e7c4a80040a8a74d2ce16e3518573dec
 				     .build()); 
 			return memberRepo.save(m);
 		} catch(Exception e) {
@@ -79,6 +83,7 @@ public class MemberService {
 			logRepo.save(Log.builder()
 				     .method("delete")
 				     .regidate(new Date())
+<<<<<<< HEAD
 				     .success(1)
 				     .build());
         	} else {
@@ -91,6 +96,11 @@ public class MemberService {
 
    
         	
+=======
+				     .success((m == null) ? 0 : 1)
+				     build());
+        	}
+>>>>>>> d216e513e7c4a80040a8a74d2ce16e3518573dec
         	return m;		
 	}
 	
