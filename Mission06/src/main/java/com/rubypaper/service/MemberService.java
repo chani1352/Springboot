@@ -2,7 +2,6 @@ package com.rubypaper.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,17 +25,17 @@ public class MemberService {
 		logRepo.save(Log.builder()
 					.method("get")
 					.regidate(new Date())
-					.success(list == null ? -1 : 1)
+					.success(list == null ? 0 : 1)
 					.build());
 		return list;
 	}
 	
-	public Optional<Member> getMemberById(Integer id){
-		Optional<Member> mem =memberRepo.findById(id);
+	public Member getMemberById(Integer id){
+		Member mem =memberRepo.findById(id).orElse(null);
 		logRepo.save(Log.builder()
 					.method("get")
 					.regidate(new Date())
-					.success((mem.orElse(null) == null) ? 0 : 1)
+					.success((mem == null) ? 0 : 1)
 					.build());
 		return mem;
 
@@ -57,20 +56,43 @@ public class MemberService {
 			Member m = memberRepo.findById(member.getId()).get();
 			if(member.getName() != null) m.setName(member.getName());
 			if(member.getPass() != null) m.setPass(member.getPass());
+			logRepo.save(Log.builder()
+				     .method("put")
+				     .regidate(new Date())
+				     .success(1)
+				     .build()); 
 			return memberRepo.save(m);
 		} catch(Exception e) {
+			logRepo.save(Log.builder()
+				     .method("put")
+				     .regidate(new Date())
+				     .success(0)
+				     .build()); 
 			return null;
 		}
 	}
 	
 	public Member removeMember(Integer id) {
-		Member m = memberRepo.findById(id).get();
-		memberRepo.deleteById(id);
-		return m;		
+		Member m = memberRepo.findById(id).orElse(null);
+        	if (m != null) {
+           		 memberRepo.deleteById(id);
+			logRepo.save(Log.builder()
+				     .method("delete")
+				     .regidate(new Date())
+				     .success(1)
+				     .build());
+        	} else {
+    			logRepo.save(Log.builder()
+      				     .method("delete")
+      				     .regidate(new Date())
+      				     .success(0)
+      				     .build());
+        	}
+
+   
+        	
+        	return m;		
 	}
-	
-	
-	
 	
 
 }

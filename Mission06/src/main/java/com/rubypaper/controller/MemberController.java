@@ -27,7 +27,7 @@ public class MemberController {
 	}
 	
 	@GetMapping("/member/{id}")
-	public Optional<Member> getMemberById(@PathVariable Integer id){
+	public Member getMemberById(@PathVariable Integer id){
 		return memberService.getMemberById(id);
 	}
 	
